@@ -3,6 +3,7 @@
 namespace filsh\yii2\oauth2server;
 
 use \Yii;
+use yii\helpers\ArrayHelper;
 use yii\i18n\PhpMessageSource;
 
 /**
@@ -68,6 +69,11 @@ class Module extends \yii\base\Module implements \yii\base\BootstrapInterface
      * @var integer Max refresh token lifetime in seconds
      */
     public $tokenRefreshLifetime;
+    
+    /**
+     * @var array additional server configuration
+     */
+    public $serverConfig = [];
 
     /**
      * @var bool enforce state flag
@@ -130,17 +136,16 @@ class Module extends \yii\base\Module implements \yii\base\BootstrapInterface
                 $grantTypes[$name] = $instance;
             }
             
+            $serverConfig = ArrayHelper::merge($this->serverConfig, [
+                 'token_param_name' => $this->tokenParamName,
+                 'access_lifetime' => $this->tokenAccessLifetime,
+                 'refresh_token_lifetime' => $this->tokenRefreshLifetime,
+             ]);
+            
             $server = \Yii::$container->get(Server::className(), [
                 $this,
                 $storages,
-                [
-                    'token_param_name' => $this->tokenParamName,
-                    'access_lifetime' => $this->tokenAccessLifetime,
-                    'refresh_token_lifetime' => $this->tokenRefreshLifetime,
-                    'enforce_state' => $this->enforceState,
-                    'allow_implicit' => $this->allowImplicit
-                    /** add more ... */
-                ],
+                $serverConfig,
                 $grantTypes,
                 $this->responseTypes
             ]);
