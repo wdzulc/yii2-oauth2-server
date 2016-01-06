@@ -14,6 +14,9 @@ use yii\i18n\PhpMessageSource;
  *     'class' => 'filsh\yii2\oauth2server\Module',
  *     'tokenParamName' => 'accessToken',
  *     'tokenAccessLifetime' => 3600 * 24,
+ *     'serverConfig' => [
+ *         'allow_implicit' => true,
+ *     ],
  *     'storageMap' => [
  *         'user_credentials' => 'common\models\User',
  *     ],
